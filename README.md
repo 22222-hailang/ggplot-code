@@ -1,6 +1,20 @@
-# ggplot-code
-ggplot code learning 
-ggplot() +
+
+library(rms)
+library(ggplot2)
+
+# 仅保留用于 RCS 的完整数据（若无缺失可忽略）
+dd <- datadist(data_analysis)
+options(datadist = "dd")
+
+# 拟合 RCS 模型（协变量同 Cox Model 3，AIP 用 4 个节点）
+rcs_model <- cph(Surv(followup_years, stroke_event) ~ rcs(AIP, 4) + 
+                   r1agey + ragender + marital + education + r1mbmi +
+                   smoking + drinking + hypertension + diabetes + sbp + dbp + 
+                   newcho + newhba1c + newglu,
+                 data = data_analysis, x = TRUE, y = TRUE)
+
+# 预测 HR（以 AIP 中位数作为参考）
+pred <- Predict(rcs_model, AIP, fun = exp, ref.zero = TRUE)ggplot() +
   # 置信区间阴影
   geom_ribbon(data = pred, aes(x = AIP, ymin = lower, ymax = upper),
               fill = "lightblue", alpha = 0.3, color = NA) +
