@@ -30,3 +30,39 @@ ggplot() +
     axis.title = element_text(size = 13, face = "bold")
   ) +
   coord_cartesian(ylim = c(0, 2.5))
+
+
+# ggplot-code
+ggplot code learning 
+ggplot() +
+  # 置信区间阴影
+  geom_ribbon(data = pred, aes(x = AIP, ymin = lower, ymax = upper),
+              fill = "lightblue", alpha = 0.3, color = NA) +
+  # 红色曲线
+  geom_line(data = pred, aes(x = AIP, y = yhat),
+            color = "red", linewidth = 0.8) +
+  # HR=1 虚线
+  geom_hline(yintercept = 1, color = "blue", linetype = "dashed", linewidth = 0.5) +
+  # 直方图（现在一定能看见！）
+  geom_histogram(data = analysis_data,
+                 aes(x = AIP, y = after_stat(count)/150),
+                 fill = "lightblue",color = "blue", alpha = 0.2, bins = 40) +
+  
+  #after_stat(count)：获取直方图每个 bin 的原始计数
+  #after_stat(density)：获取概率密度
+# 常用的统计量
+after_stat(count)    # 原始计数
+after_stat(density)  # 概率密度
+after_stat(ncount)   # 标准化计数（最大值为1）
+after_stat(ndensity) # 标准化密度
+after_stat(width)    # bin的宽度
+after_stat(x)        # bin的中心位置
+
+
+
+
+
+
+
+
+  
