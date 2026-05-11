@@ -1,7 +1,15 @@
 
 library(rms)
 library(ggplot2)
-
+# 1. 预测（你的原代码）
+pred <- Predict(rcs_model, AIP, fun = exp, ref.zero = TRUE)
+# 2. 自动找到【HR 第一次穿过 1 的 AIP 值】（真正的ref点）
+crossing_point <- pred$AIP[which.min(abs(pred$yhat - 1))]
+cat("自动识别参考点 AIP =", round(crossing_point, 2), "\n")
+# 3. 提取P值
+aov <- anova(rcs_model)
+p_overall <- aov["AIP", "P"]
+p_nonlinear <- aov[nrow(aov), "P"]
 # 仅保留用于 RCS 的完整数据（若无缺失可忽略）
 dd <- datadist(data_analysis)
 options(datadist = "dd")
